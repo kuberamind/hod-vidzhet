@@ -1,6 +1,6 @@
 # hod.js: карточка хода
 
-Подключение: `<div id="h"></div><script>window.HOD={...}</script><script src="CDN_URL"></script>`
+Подключение: `<div id="h"></div><script>data-hod=JSON (или window.HOD)<script src="CDN_URL"></script>`
 
 Схема `window.HOD`:
 `{t:"задача", s:[[имя, способ, статус, мс], ...], q, v, e}`

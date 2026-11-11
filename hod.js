@@ -1,6 +1,25 @@
 (function () {
-  var d = window.HOD || {}, root = document.getElementById("h");
+  var root = document.getElementById("h");
   if (!root) return;
+  function dannye() {
+    var d = null;
+    try { var a = root.getAttribute("data-hod"); if (a) d = JSON.parse(a); } catch (x) { d = null; }
+    if (!d || typeof d !== "object") d = window.HOD;
+    return d && typeof d === "object" && Object.keys(d).length ? d : null;
+  }
+  var gotov = false;
+  function risovat() {
+    if (gotov) return true;
+    var d = dannye();
+    if (!d) return false;
+    gotov = true; render(d); return true;
+  }
+  root.innerHTML = "<div style='font:13px system-ui,sans-serif;color:#71717a'>загрузка…</div>";
+  if (!risovat()) {
+    var t0 = Date.now(), iv = setInterval(function () { if (risovat() || Date.now() - t0 > 3000) clearInterval(iv); }, 50);
+    window.addEventListener("hod", function (ev) { if (!gotov) { var dd = ev && ev.detail; if (dd && typeof dd === "object") window.HOD = dd; risovat(); } });
+  }
+  function render(d) {
   var NORMA = 4;
   var SP = { pachka: ["пачка", "#2563eb"], skript: ["скрипт", "#7c3aed"], cikl: ["подагент", "#d97706"], dlinnoe: ["длинное", "#0891b2"], gotovyy: ["готовый скрипт", "#059669"], cepochka: ["цепочка", "#db2777"], potok: ["воркфлоу", "#16a34a"], obychnyy: ["одиночный", "#6b7280"] };
   var ST = { ok: ["✓", "#22c55e"], err: ["✗", "#ef4444"], run: ["…", "#d97706"] };
@@ -29,4 +48,5 @@
   });
   h += "<details><summary>Детали</summary><pre>" + e(JSON.stringify(d, null, 1)) + "</pre></details></div>";
   root.innerHTML = h;
+  }
 })();
