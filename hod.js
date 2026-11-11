@@ -20,6 +20,15 @@
     var ST = { ok: ["✓", "#22c55e", "готово"], err: ["✗", "#ef4444", "ошибка"], run: ["…", "#d97706", "идёт"], oshibka: ["✗", "#ef4444", "ошибка"], propusk: ["–", "#9ca3af", "пропуск"] };
     var e = function (s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); };
     var num = function (v) { v = Number(v) || 0; return v >= 1e6 ? (v / 1e6).toFixed(1) + " млн" : v >= 1e3 ? Math.round(v / 1e3) + " тыс." : String(Math.round(v)); };
+    if (d.plan) {
+      var pk = d.k || [], pq = Number(d.q) || NORMA, pc = pq > NORMA ? "#ef4444" : "#22c55e";
+      var ph = "<style>.hp{font:13px/1.45 system-ui,sans-serif;color:var(--color-text-primary,#18181b)}.hp details{border-radius:10px;background:var(--color-background-secondary,#f4f4f5);border-left:5px solid " + pc + "}.hp summary{list-style:none;cursor:pointer;display:flex;gap:8px;align-items:center;padding:6px 10px;font-weight:600}.hp summary::-webkit-details-marker{display:none}.hp .pt{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.hp .pm{font-size:12px;color:var(--color-text-secondary,#71717a);white-space:nowrap}.hp .pr{display:flex;gap:8px;align-items:center;padding:3px 10px 3px 14px}.hp .pb{font-size:11px;color:#fff;border-radius:8px;padding:1px 7px;white-space:nowrap}.hp .pf{padding:4px 10px 8px;font-size:12px;color:var(--color-text-secondary,#71717a)}@media (prefers-color-scheme:dark){.hp{color:var(--color-text-primary,#e4e4e7)}.hp details{background:var(--color-background-secondary,#27272a)}}</style>";
+      ph += "<div class=hp><details><summary><span>\u25B8</span><span class=pt>\u041F\u043B\u0430\u043D: " + e(d.t || "\u0445\u043E\u0434") + "</span><span class=pm>" + pk.length + " \u043A\u0443\u0441. \u00B7 \u0446\u0435\u043B\u044C \u2264" + pq + " \u0437\u0430\u043F\u0440.</span></summary>";
+      pk.forEach(function (x, i) { var sp = SP[x[1]] || [x[1] || "\u2013", "#71717a"]; ph += "<div class=pr><span class=pb style='background:" + sp[1] + "'>" + e(sp[0]) + "</span><span>" + (i + 1) + ". " + e(x[0]) + "</span></div>"; });
+      if (d.m) ph += "<div class=pf>" + e(d.m) + "</div>";
+      root.innerHTML = ph + "</details></div>";
+      return;
+    }
     var dur = function (ms) { ms = Number(ms) || 0; return ms >= 60000 ? (ms / 60000).toFixed(1) + " мин" : ms >= 1000 ? (ms / 1000).toFixed(1) + " с" : ms + " мс"; };
     var hm = function (min) { var t = new Date(min * 60000); return ("0" + t.getHours()).slice(-2) + ":" + ("0" + t.getMinutes()).slice(-2); };
     var css = ".hw{font:13px/1.45 system-ui,-apple-system,sans-serif;color:var(--color-text-primary,#18181b);max-width:780px}.hw *{box-sizing:border-box}" +
@@ -123,7 +132,7 @@
       var hcEl = root.querySelector("details.hc"); if (hcEl) hcEl.addEventListener("toggle", function () { acik = hcEl.open; });
       var cp = root.querySelector("[data-cp]"); if (cp) cp.onclick = function () { var ok = false; try { navigator.clipboard.writeText(cm); ok = true; } catch (z) {} if (!ok) { try { var ta = document.createElement("textarea"); ta.value = cm; document.body.appendChild(ta); ta.select(); document.execCommand("copy"); document.body.removeChild(ta); } catch (z2) {} } cp.textContent = "скопировано ✓"; };
       var wb = root.querySelector("[data-wish]"), wi = root.querySelector(".wf input");
-      if (wb) wb.onclick = function () { var t = (wi.value || "").trim(); if (!t) return; var w = document.getElementById("hws"); try { if (typeof sendPrompt === "function") { sendPrompt("ekon_uluchshenie: " + t); if (w) w.textContent = "✓ отправлено агенту: " + t; wi.value = ""; } else if (w) w.textContent = "отправка недоступна в этом окне"; } catch (z) { if (w) w.textContent = "не отправилось"; } };
+      if (wb) wb.onclick = function () { var t = (wi.value || "").trim(); if (!t) return; var w = document.getElementById("hws"); try { if (typeof sendPrompt === "function") { sendPrompt("ekon_uluchshenie: " + t); if (w) w.textContent = "✓ отправлено агенту: " + t; wi.value = ""; } else { var tx = "ekon_uluchshenie: " + t, okc = false; try { navigator.clipboard.writeText(tx); okc = true; } catch (z3) {} if (!okc) { try { var ta2 = document.createElement("textarea"); ta2.value = tx; document.body.appendChild(ta2); ta2.select(); document.execCommand("copy"); document.body.removeChild(ta2); okc = true; } catch (z4) {} } if (w) w.textContent = okc ? "скопировано \u2713 \u2014 отправь агенту: " + t : "отправка недоступна в этом окне"; } } catch (z) { if (w) w.textContent = "не отправилось"; } };
     }
     paint();
     // подробности: отдельный JS-файл с CDN (не растит контекст агента); файл появляется через 1–3 с после итога
