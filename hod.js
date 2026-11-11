@@ -72,6 +72,7 @@
     tb += "<tr><td>" + (i + 1) + "</td><td class=nm>" + e(x[0]) + "</td><td>" + e(sp[0]) + "</td><td style='color:" + st[1] + "'>" + e(SW[x[2]] || x[2] || "идёт") + "</td><td class=r>" + (Number(x[3]) ? e(x[3]) + " мс" : "—") + "</td></tr>";
   });
   tb += "</table><div class=tot>Всего: " + tm + " мс · запросов " + q + " · вызовов внутри " + (Number(d.v) || 0) + " · экв. " + num(d.e) + "</div>";
+  if (d.u) h += "<div class=tot>\u{1F4A1} " + e(d.u) + "</div>";
   h += "<details" + (window.HOD_OPEN || root.hasAttribute("data-open") ? " open" : "") + "><summary>Детали</summary>" + tb + "</details></div>";
   root.innerHTML = h;
   }
