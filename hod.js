@@ -36,17 +36,28 @@
     ".hw .k .sp{font-size:11px;padding:1px 7px;border-radius:99px;color:#fff;white-space:nowrap}.hw .k .n{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:600}" +
     ".hw .k .m{font-size:11px;color:var(--color-text-secondary,#71717a);white-space:nowrap}.hw .k .s{font-weight:700}" +
     ".hw details summary{cursor:pointer;font-size:12px;color:var(--color-text-secondary,#71717a);margin-top:8px}" +
-    ".hw pre{margin:4px 0 0;font:11px/1.45 ui-monospace,monospace;white-space:pre-wrap;word-break:break-word;color:var(--color-text-secondary,#52525b)}" +
-    "@media (prefers-color-scheme:dark){.hw{color:var(--color-text-primary,#e4e4e7)}.hw .c,.hw .k{background:var(--color-background-secondary,#27272a)}.hw .sub,.hw .c span,.hw .k .m,.hw details summary,.hw pre{color:var(--color-text-secondary,#a1a1aa)}}";
+    ".hw .c i{display:block;font-style:normal;font-size:10px;color:#22c55e;line-height:1.3}" +
+    ".hw table{width:100%;border-collapse:collapse;margin-top:6px;font-size:12px}.hw th{text-align:left;font-weight:500;font-size:11px;color:var(--color-text-secondary,#71717a);padding:2px 6px;border-bottom:1px solid rgba(128,128,128,.3)}" +
+    ".hw td{padding:3px 6px;border-bottom:1px solid rgba(128,128,128,.15);vertical-align:baseline}.hw td.r,.hw th.r{text-align:right;white-space:nowrap}.hw td.nm{word-break:break-word}" +
+    ".hw .tot{margin-top:6px;font-size:12px;color:var(--color-text-secondary,#71717a)}" +
+    "@media (prefers-color-scheme:dark){.hw{color:var(--color-text-primary,#e4e4e7)}.hw .c,.hw .k{background:var(--color-background-secondary,#27272a)}.hw .sub,.hw .c span,.hw .k .m,.hw details summary,.hw th,.hw .tot{color:var(--color-text-secondary,#a1a1aa)}}";
   var s = d.s || [], q = Number(d.q) || 0, ok = q > 0 && q <= NORMA;
   var h = "<style>" + css + "</style><div class=hw><h3>" + e(d.t || "Ход") + "</h3><div class=sub>" + s.length + " шаг(ов)</div>";
-  h += "<div class=row><div class='c " + (ok ? "grn" : q > NORMA ? "red" : "") + "'><b>" + q + "</b><span>запросов" + (ok ? " · ✓ выше нормы" : "") + "</span></div>" +
+  h += "<div class=row><div class='c " + (ok ? "grn" : q > NORMA ? "red" : "") + "'><b>" + q + "</b><span>запросов</span>" + (ok ? "<i>✓ выше нормы</i>" : "") + "</div>" +
     "<div class=c><b>" + (Number(d.v) || 0) + "</b><span>вызовов внутри</span></div><div class=c><b>" + num(d.e) + "</b><span>экв. токенов</span></div></div>";
   s.forEach(function (x) {
     var sp = SP[x[1]] || [x[1] || "?", "#6b7280"], st = ST[x[2]] || [x[2] || "…", "#d97706"];
     h += "<div class=k style='border-left-color:" + sp[1] + "'><span class=sp style='background:" + sp[1] + "'>" + e(sp[0]) + "</span><span class=n>" + e(x[0]) + "</span><span class=m>" + dur(x[3]) + "</span><span class=s style='color:" + st[1] + "'>" + e(st[0]) + "</span></div>";
   });
-  h += "<details><summary>Детали</summary><pre>" + e(JSON.stringify(d, null, 1)) + "</pre></details></div>";
+  var SW = { ok: "готово", err: "ошибка", run: "идёт" }, tm = 0;
+  var tb = "<table><tr><th>№</th><th>шаг</th><th>способ</th><th>статус</th><th class=r>время</th></tr>";
+  s.forEach(function (x, i) {
+    var sp = SP[x[1]] || [x[1] || "?"], st = ST[x[2]] || [0, "#d97706"];
+    tm += Number(x[3]) || 0;
+    tb += "<tr><td>" + (i + 1) + "</td><td class=nm>" + e(x[0]) + "</td><td>" + e(sp[0]) + "</td><td style='color:" + st[1] + "'>" + e(SW[x[2]] || x[2] || "идёт") + "</td><td class=r>" + (Number(x[3]) ? e(x[3]) + " мс" : "—") + "</td></tr>";
+  });
+  tb += "</table><div class=tot>Всего: " + tm + " мс · запросов " + q + " · вызовов внутри " + (Number(d.v) || 0) + " · экв. " + num(d.e) + "</div>";
+  h += "<details" + (window.HOD_OPEN || root.hasAttribute("data-open") ? " open" : "") + "><summary>Детали</summary>" + tb + "</details></div>";
   root.innerHTML = h;
   }
 })();
