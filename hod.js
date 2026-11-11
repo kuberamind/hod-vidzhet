@@ -58,6 +58,7 @@
       if (x.er) h += "<div class=lb style='color:#ef4444'>ошибка</div><pre class=er>" + e(x.er) + "</pre>";
       return h + "</div></details>";
     }
+    var acik = false;
     function paint() {
       det = (window.HODQ || {})[d.id] || det;
       var tm = det && det.ts ? [Math.round(det.ts[0] / 60000), Math.round((det.ts[1] - det.ts[0]) / 1000)] : d.tm;
@@ -115,7 +116,11 @@
       else if (d.ku && d.ku[0] > 0) X += "<div class=sub>куратор: " + e(d.ku[0]) + " бриф(ов), ok " + e(d.ku[1]) + "</div>";
       if (d.sv === 1 || d.sv === 0) X += "<div class=sub style='color:" + (d.sv ? "#22c55e" : "#d97706") + "'>" + (d.sv ? "✓ сверено с журналом посредника и замка" : "⚠ расхождение со сверкой") + "</div>";
       if (d.id) X += "<div class=sub style='margin-top:6px'><a class=lk target=_blank rel=noopener href='" + PULT + "#hod=" + encodeURIComponent(d.id) + "'>открыть в пульте →</a></div>";
-      root.innerHTML = h + X + "</div>";
+      var cq = q > NORMA ? "#ef4444" : "#22c55e", sm = "<span class=hq style='color:" + cq + "'>" + q + "/" + NORMA + "</span><span class=he>" + num(d.e) + " экв</span>" + (q > 0 && q <= NORMA ? "<span class=hm title='ход выше нормы'>🥇</span>" : "") + (d.sv === 1 ? "<span class=hv style='color:#22c55e' title='сверено с журналом посредника и замка'>✓</span>" : d.sv === 0 ? "<span class=hv style='color:#d97706' title='расхождение со сверкой'>⚠</span>" : "");
+      var hc = "<details class=hc" + (acik ? " open" : "") + "><summary><span class=ha></span><span class=ht>" + e(String((det && det.t) || d.t || "Ход").slice(0, 70)) + "</span>" + sm + "</summary>";
+      h = h.replace("</style><div class=hw>", ".hw details.hc>summary{list-style:none;cursor:pointer;display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:6px 10px;border-radius:10px;background:var(--color-background-secondary,#f4f4f5);border-left:5px solid " + cq + "}.hw details.hc>summary::-webkit-details-marker{display:none}.hw .ha:before{content:'\\25B8';display:inline-block;transition:transform .15s}.hw details.hc[open]>summary .ha:before{transform:rotate(90deg)}.hw .ht{flex:1;min-width:120px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.hw .hq,.hw .he,.hw .hv,.hw .hm{font-size:12px;font-weight:600;white-space:nowrap}.hw .he{color:var(--color-text-secondary,#71717a)}.hw details.hc>summary+*{margin-top:8px}@media (prefers-color-scheme:dark){.hw details.hc>summary{background:var(--color-background-secondary,#27272a)}}</style><div class=hw>" + hc);
+      root.innerHTML = h + X + "</details></div>";
+      var hcEl = root.querySelector("details.hc"); if (hcEl) hcEl.addEventListener("toggle", function () { acik = hcEl.open; });
       var cp = root.querySelector("[data-cp]"); if (cp) cp.onclick = function () { var ok = false; try { navigator.clipboard.writeText(cm); ok = true; } catch (z) {} if (!ok) { try { var ta = document.createElement("textarea"); ta.value = cm; document.body.appendChild(ta); ta.select(); document.execCommand("copy"); document.body.removeChild(ta); } catch (z2) {} } cp.textContent = "скопировано ✓"; };
       var wb = root.querySelector("[data-wish]"), wi = root.querySelector(".wf input");
       if (wb) wb.onclick = function () { var t = (wi.value || "").trim(); if (!t) return; var w = document.getElementById("hws"); try { if (typeof sendPrompt === "function") { sendPrompt("ekon_uluchshenie: " + t); if (w) w.textContent = "✓ отправлено агенту: " + t; wi.value = ""; } else if (w) w.textContent = "отправка недоступна в этом окне"; } catch (z) { if (w) w.textContent = "не отправилось"; } };
