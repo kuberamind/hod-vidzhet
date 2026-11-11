@@ -43,8 +43,23 @@
     "@media (prefers-color-scheme:dark){.hw{color:var(--color-text-primary,#e4e4e7)}.hw .c,.hw .k{background:var(--color-background-secondary,#27272a)}.hw .sub,.hw .c span,.hw .k .m,.hw details summary,.hw th,.hw .tot{color:var(--color-text-secondary,#a1a1aa)}}";
   var s = d.s || [], q = Number(d.q) || 0, ok = q > 0 && q <= NORMA;
   var h = "<style>" + css + "</style><div class=hw><h3>" + e(d.t || "Ход") + "</h3><div class=sub>" + s.length + " шаг(ов)</div>";
-  h += "<div class=row><div class='c " + (ok ? "grn" : q > NORMA ? "red" : "") + "'><b>" + q + "</b><span>запросов</span>" + (ok ? "<i>✓ выше нормы</i>" : "") + "</div>" +
-    "<div class=c><b>" + (Number(d.v) || 0) + "</b><span>вызовов внутри</span></div><div class=c><b>" + num(d.e) + "</b><span>экв. токенов</span></div></div>";
+  var n = d.n && typeof d.n === "object" ? d.n : null, zz = Array.isArray(d.z) ? d.z : null, dl = Array.isArray(d.d) ? d.d : null, mm = Number(d.m) || 0, oo = Array.isArray(d.o) ? d.o : null, pp = d.p ? String(d.p) : "";
+  var qs = "запросов", ar = "";
+  if (n) {
+    var pr = ["норма ≤" + NORMA];
+    if (n.sr != null) pr.push("у тебя сегодня " + e(n.sr));
+    if (n.vse != null) pr.push("у всех " + e(n.vse));
+    qs = "запросов · " + pr.join(" · ");
+    if (n.pred != null) { var df = q - Number(n.pred); ar = df < 0 ? "<i>▼ лучше прошлого хода (" + e(n.pred) + ")</i>" : df > 0 ? "<i style='color:#ef4444'>▲ хуже прошлого хода (" + e(n.pred) + ")</i>" : "<i style='color:#71717a'>= как в прошлый ход</i>"; }
+  }
+  h += "<div class=row><div class='c " + (ok ? "grn" : q > NORMA ? "red" : "") + "'><b>" + q + "</b><span>" + qs + "</span>" + (ok ? "<i>✓ выше нормы</i>" : "") + ar + "</div>" +
+    "<div class=c><b>" + (Number(d.v) || 0) + "</b><span>вызовов внутри</span></div><div class=c><b>" + num(d.e) + "</b><span>экв. токенов</span></div>";
+  if (zz && Number(zz[0]) > 0) h += "<div class='c grn'><b>~" + e(zz[0]) + "</b><span>цепочка сэкономила запросов · ~" + num(zz[1]) + " экв.</span></div>";
+  if (dl && Number(dl[0]) > 0) h += "<div class=c><b>" + e(dl[0]) + "</b><span>вызовов в самой длинной цепочке" + (dl[1] != null ? " · рекорд дня " + e(dl[1]) : "") + "</span></div>";
+  if (mm > 0) h += "<div class=c><b>🥇 " + mm + "</b><span>ходов выше нормы сегодня</span></div>";
+  if (oo && Number(oo[0]) > 0) h += "<div class='c red'><b>" + e(oo[0]) + "</b><span>отказов замка" + (oo[1] ? " · " + e(oo[1]) : "") + "</span></div>";
+  h += "</div>";
+  if (pp) h += "<div class=sub style='margin:2px 0 6px'>💡 " + e(pp) + "</div>";
   s.forEach(function (x) {
     var sp = SP[x[1]] || [x[1] || "?", "#6b7280"], st = ST[x[2]] || [x[2] || "…", "#d97706"];
     h += "<div class=k style='border-left-color:" + sp[1] + "'><span class=sp style='background:" + sp[1] + "'>" + e(sp[0]) + "</span><span class=n>" + e(x[0]) + "</span><span class=m>" + dur(x[3]) + "</span><span class=s style='color:" + st[1] + "'>" + e(st[0]) + "</span></div>";
