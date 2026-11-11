@@ -20,13 +20,14 @@
     window.addEventListener("hod", function (ev) { if (!gotov) { var dd = ev && ev.detail; if (dd && typeof dd === "object") window.HOD = dd; risovat(); } });
   }
   function render(d) {
-  var NORMA = 4;
+  var NORMA = 4, PULT = "https://claude.ai/artifact/FwzxVQ5JKYHEthP9HdUJJC";
   var SP = { pachka: ["пачка", "#2563eb"], skript: ["скрипт", "#7c3aed"], cikl: ["подагент", "#d97706"], dlinnoe: ["длинное", "#0891b2"], gotovyy: ["готовый скрипт", "#059669"], cepochka: ["цепочка", "#db2777"], potok: ["воркфлоу", "#16a34a"], obychnyy: ["одиночный", "#6b7280"] };
   var ST = { ok: ["✓", "#22c55e"], err: ["✗", "#ef4444"], run: ["…", "#d97706"] };
   var e = function (s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); };
   var num = function (v) { v = Number(v) || 0; return v >= 1e6 ? (v / 1e6).toFixed(1) + " млн" : v >= 1e3 ? Math.round(v / 1e3) + " тыс." : String(Math.round(v)); };
   var dur = function (ms) { ms = Number(ms) || 0; return ms >= 1000 ? (ms / 1000).toFixed(1) + " с" : ms + " мс"; };
-  var css = ".hw{font:13px/1.5 system-ui,-apple-system,sans-serif;color:var(--color-text-primary,#18181b);max-width:780px}.hw *{box-sizing:border-box}" +
+  var css = ".hw .hg{margin:6px 0}.hw .bars{display:flex;align-items:flex-end;gap:2px;height:36px;border-bottom:1px solid rgba(128,128,128,.3)}.hw .b{flex:1;max-width:14px;min-width:3px;background:#22c55e;border-radius:2px 2px 0 0}.hw .b.mx{background:#ef4444}.hw .up{color:#ef4444}.hw .dn{color:#22c55e}.hw .chs{margin:4px 0;font-size:11px;color:var(--color-text-secondary,#71717a)}.hw .ch{display:inline-block;margin:0 4px 2px 0;padding:1px 8px;border-radius:99px;background:rgba(128,128,128,.18);color:var(--color-text-primary,#18181b)}.hw .lk{color:#2563eb;text-decoration:none;font-weight:600}.hw .lk:hover{text-decoration:underline}" +
+    ".hw{font:13px/1.5 system-ui,-apple-system,sans-serif;color:var(--color-text-primary,#18181b);max-width:780px}.hw *{box-sizing:border-box}" +
     ".hw h3{margin:0 0 2px;font-size:15px;font-weight:600}.hw .sub{color:var(--color-text-secondary,#71717a);font-size:12px}" +
     ".hw .row{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:8px;margin:10px 0}" +
     ".hw .c{border-radius:10px;padding:8px 10px;background:var(--color-background-secondary,#f4f4f5);border:1px solid transparent}" +
@@ -40,7 +41,7 @@
     ".hw table{width:100%;border-collapse:collapse;margin-top:6px;font-size:12px}.hw th{text-align:left;font-weight:500;font-size:11px;color:var(--color-text-secondary,#71717a);padding:2px 6px;border-bottom:1px solid rgba(128,128,128,.3)}" +
     ".hw td{padding:3px 6px;border-bottom:1px solid rgba(128,128,128,.15);vertical-align:baseline}.hw td.r,.hw th.r{text-align:right;white-space:nowrap}.hw td.nm{word-break:break-word}" +
     ".hw .tot{margin-top:6px;font-size:12px;color:var(--color-text-secondary,#71717a)}" +
-    "@media (prefers-color-scheme:dark){.hw{color:var(--color-text-primary,#e4e4e7)}.hw .c,.hw .k{background:var(--color-background-secondary,#27272a)}.hw .sub,.hw .c span,.hw .k .m,.hw details summary,.hw th,.hw .tot{color:var(--color-text-secondary,#a1a1aa)}}";
+    "@media (prefers-color-scheme:dark){.hw{color:var(--color-text-primary,#e4e4e7)}.hw .c,.hw .k{background:var(--color-background-secondary,#27272a)}.hw .sub,.hw .c span,.hw .k .m,.hw details summary,.hw th,.hw .tot,.hw .chs{color:var(--color-text-secondary,#a1a1aa)}.hw .ch{color:var(--color-text-primary,#e4e4e7)}.hw .lk{color:#60a5fa}}";
   var s = d.s || [], q = Number(d.q) || 0, ok = q > 0 && q <= NORMA;
   var h = "<style>" + css + "</style><div class=hw><h3>" + e(d.t || "Ход") + "</h3><div class=sub>" + s.length + " шаг(ов)</div>";
   var n = d.n && typeof d.n === "object" ? d.n : null, zz = Array.isArray(d.z) ? d.z : null, dl = Array.isArray(d.d) ? d.d : null, mm = Number(d.m) || 0, oo = Array.isArray(d.o) ? d.o : null, pp = d.p ? String(d.p) : "";
@@ -64,6 +65,19 @@
     var sp = SP[x[1]] || [x[1] || "?", "#6b7280"], st = ST[x[2]] || [x[2] || "…", "#d97706"];
     h += "<div class=k style='border-left-color:" + sp[1] + "'><span class=sp style='background:" + sp[1] + "'>" + e(sp[0]) + "</span><span class=n>" + e(x[0]) + "</span><span class=m>" + dur(x[3]) + "</span><span class=s style='color:" + st[1] + "'>" + e(st[0]) + "</span></div>";
   });
+  var rr = Array.isArray(d.r) && d.r.length ? d.r : null, cc = Array.isArray(d.c) ? d.c : null, ww = d.w && typeof d.w === "object" ? d.w : null, rc = Array.isArray(d.rc) && d.rc.length ? d.rc : null, ku = Array.isArray(d.ku) ? d.ku : null, sv = d.sv === 1 || d.sv === 0 ? d.sv : null;
+  var X = "";
+  if (rr) {
+    var mx = Math.max.apply(null, rr.concat([1])), im = rr.indexOf(mx), bars = rr.map(function (v, i) { return "<i class='b" + (i === im && rr.length > 1 ? " mx" : "") + "' title='запрос " + (i + 1) + ": " + e(v) + " тыс.' style='height:" + Math.max(2, Math.round(34 * v / mx)) + "px'></i>"; }).join("");
+    X += "<div class=hg><div class=bars>" + bars + "</div><div class=sub>экв. по запросам, тыс." + (rr.length > 1 ? " · дороже всех №" + (im + 1) + " (" + e(mx) + ")" : "") + "</div></div>";
+  }
+  if (cc && cc.length > 1) { var dc = Number(cc[1]) - Number(cc[0]); X += "<div class=sub>контекст " + e(cc[0]) + " → " + e(cc[1]) + " тыс. " + (dc > 0 ? "<b class=up>▲ +" + dc + "</b>" : dc < 0 ? "<b class=dn>▼ " + dc + "</b>" : "= без роста") + "</div>"; }
+  if (ww) { var WN = [["p", "прямых"], ["i", "внутри скриптов"], ["k", "куратор"], ["a", "подагенты"]], wp = []; WN.forEach(function (z) { if (Number(ww[z[0]]) > 0) wp.push("<span class=ch>" + z[1] + " " + e(ww[z[0]]) + "</span>"); }); if (wp.length) X += "<div class=chs>вызовы: " + wp.join("") + "</div>"; }
+  if (oo && Number(oo[0]) > 0) X += "<div class=sub style='color:#ef4444'>⛔ отказов замка " + e(oo[0]) + (oo[1] ? " · " + e(oo[1]) : "") + "</div>";
+  if (rc) X += "<div class=chs>рецепты: " + rc.map(function (x) { return "<span class=ch>" + e(x) + "</span>"; }).join("") + "</div>";
+  if (ku && Number(ku[0]) > 0) X += "<div class=sub>куратор: " + e(ku[0]) + " бриф(ов), ok " + e(ku[1]) + "</div>";
+  if (sv !== null) X += "<div class=sub style='color:" + (sv ? "#22c55e" : "#d97706") + "'>" + (sv ? "✓ сверено с журналом посредника и замка" : "⚠ расхождение со сверкой") + "</div>";
+  if (d.id) X += "<div class=sub style='margin-top:6px'><a class=lk target=_blank rel=noopener href='" + PULT + "#hod=" + encodeURIComponent(d.id) + "'>открыть в пульте →</a></div>";
   var SW = { ok: "готово", err: "ошибка", run: "идёт" }, tm = 0;
   var tb = "<table><tr><th>№</th><th>шаг</th><th>способ</th><th>статус</th><th class=r>время</th></tr>";
   s.forEach(function (x, i) {
@@ -73,7 +87,7 @@
   });
   tb += "</table><div class=tot>Всего: " + tm + " мс · запросов " + q + " · вызовов внутри " + (Number(d.v) || 0) + " · экв. " + num(d.e) + "</div>";
   if (d.u) h += "<div class=tot>\u{1F4A1} " + e(d.u) + "</div>";
-  h += "<details" + (window.HOD_OPEN || root.hasAttribute("data-open") ? " open" : "") + "><summary>Детали</summary>" + tb + "</details></div>";
+  h += X + "<details" + (window.HOD_OPEN || root.hasAttribute("data-open") ? " open" : "") + "><summary>Детали</summary>" + tb + "</details></div>";
   root.innerHTML = h;
   }
 })();
