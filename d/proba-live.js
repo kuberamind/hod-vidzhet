@@ -1,1 +1,1 @@
-window.PROBA="v1";
+window.PROBA="v2";
